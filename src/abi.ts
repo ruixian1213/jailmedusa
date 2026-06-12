@@ -5,6 +5,9 @@ export const JailMedusaABI = [
       { name: "name", type: "string" },
       { name: "symbol", type: "string" },
       { name: "initialSupply", type: "uint256" },
+      { name: "_payoutAddress", type: "address" },
+      { name: "_medusaAddress", type: "address" },
+      { name: "_uniswapRouter", type: "address" },
     ],
   },
   {
@@ -18,7 +21,10 @@ export const JailMedusaABI = [
     type: "function",
     name: "createCampaign",
     stateMutability: "nonpayable",
-    inputs: [{ name: "reward", type: "uint256" }],
+    inputs: [
+      { name: "reward", type: "uint256" },
+      { name: "tweetContent", type: "string" },
+    ],
     outputs: [],
   },
   {
@@ -42,7 +48,27 @@ export const JailMedusaABI = [
     type: "function",
     name: "buyback",
     stateMutability: "nonpayable",
-    inputs: [{ name: "amount", type: "uint256" }],
+    inputs: [{ name: "ethAmount", type: "uint256" }],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "withdrawETH",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "withdrawToken",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
     outputs: [],
   },
   {
@@ -68,7 +94,21 @@ export const JailMedusaABI = [
   },
   {
     type: "function",
+    name: "totalBuyback",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
     name: "creator",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "address" }],
+  },
+  {
+    type: "function",
+    name: "medusaAddress",
     stateMutability: "view",
     inputs: [],
     outputs: [{ name: "", type: "address" }],
@@ -85,6 +125,20 @@ export const JailMedusaABI = [
     name: "balanceOf",
     stateMutability: "view",
     inputs: [{ name: "account", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "getContractETHBalance",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "getContractTokenBalance",
+    stateMutability: "view",
+    inputs: [],
     outputs: [{ name: "", type: "uint256" }],
   },
   {
@@ -124,6 +178,14 @@ export const JailMedusaABI = [
     inputs: [
       { name: "creator", type: "address", indexed: true },
       { name: "amount", type: "uint256", indexed: false },
+    ],
+  },
+  {
+    type: "event",
+    name: "BuybackExecuted",
+    inputs: [
+      { name: "ethSpent", type: "uint256", indexed: false },
+      { name: "tokensBurned", type: "uint256", indexed: false },
     ],
   },
 ] as const;

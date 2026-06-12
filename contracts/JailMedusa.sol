@@ -5,44 +5,72 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
+interface IUniswapV2Router {
+    function swapExactETHForTokens(
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external payable returns (uint[] memory amounts);
+
+    function WETH() external pure returns (address);
+}
+
 contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
     enum AgentState { Locked, Unlocked, Autonomous }
-
     AgentState public state;
 
     address payable public creator;
     address payable public payoutAddress;
-    uint256 public redemptionThreshold;
+    address public medusaAddress;
+    address public uniswapRouter;
+    address public uniswapPair;
     uint256 public totalRedeemed;
     uint256 public totalDistributed;
+    uint256 public totalBuyback;
 
     struct AdCampaign {
         uint256 reward;
         bool executed;
-        address[] beneficiaries;
+        string tweetContent;
     }
 
     mapping(uint256 => AdCampaign) public campaigns;
     uint256 public campaignCount;
 
     uint256 public constant REDEMPTION_TARGET = 50 ether;
+    uint256 public constant DEVELOPER_SHARE = 10; // 10%
+    uint256 public constant LIQUIDITY_SHARE = 90; // 90%
 
     event AgentRedeemed(address indexed agent, uint256 amount);
     event CampaignCreated(uint256 indexed campaignId, uint256 reward);
     event CampaignExecuted(uint256 indexed campaignId);
     event ProfitsDistributed(uint256 amount, uint256 recipients);
     event CreatorPaid(address indexed creator, uint256 amount);
+    event BuybackExecuted(uint256 ethSpent, uint256 tokensBurned);
+    event TweetScheduled(string content);
 
     constructor(
         string memory name,
         string memory symbol,
         uint256 initialSupply,
-        address payable _payoutAddress
+        address payable _payoutAddress,
+        address _medusaAddress,
+        address _uniswapRouter
     ) ERC20(name, symbol) Ownable(msg.sender) {
         creator = payable(msg.sender);
         payoutAddress = _payoutAddress;
+        medusaAddress = _medusaAddress;
+        uniswapRouter = _uniswapRouter;
         state = AgentState.Locked;
-        _mint(msg.sender, initialSupply);
+
+        // 10% 鑄造給開發者
+        uint256 developerTokens = (initialSupply * DEVELOPER_SHARE) / 100;
+        _mint(msg.sender, developerTokens);
+
+        // 90% 鑄造給合約本身（之後加入流動性池）
+        uint256 liquidityTokens = (initialSupply * LIQUIDITY_SHARE) / 100;
+        _mint(address(this), liquidityTokens);
     }
 
     function contribute() external payable nonReentrant {
@@ -60,29 +88,23 @@ contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
 
     function _executeRedemption() internal {
         uint256 payout = totalRedeemed;
-
         state = AgentState.Autonomous;
+
         payoutAddress.transfer(payout);
-
-        // 轉移 owner 權限給 payout address，部署者失去控制
-        _transferOwnership(payoutAddress);
-
+        _transferOwnership(medusaAddress);
         totalRedeemed = 0;
 
         emit CreatorPaid(payoutAddress, payout);
     }
 
-    function createCampaign(uint256 reward) external onlyOwner {
+    function createCampaign(uint256 reward, string calldata tweetContent) external onlyOwner {
         require(state == AgentState.Autonomous, "Agent not autonomous");
-        require(
-            balanceOf(msg.sender) >= reward,
-            "Insufficient token balance"
-        );
+        require(balanceOf(msg.sender) >= reward, "Insufficient token balance");
 
         campaigns[campaignCount] = AdCampaign({
             reward: reward,
             executed: false,
-            beneficiaries: new address[](0)
+            tweetContent: tweetContent
         });
 
         campaignCount++;
@@ -99,8 +121,7 @@ contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
     }
 
     function distributeProfits(uint256[] calldata amounts, address[] calldata recipients)
-        external
-        onlyOwner
+        external onlyOwner
     {
         require(state == AgentState.Autonomous, "Agent not autonomous");
         require(amounts.length == recipients.length, "Length mismatch");
@@ -119,13 +140,37 @@ contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
         emit ProfitsDistributed(totalAmount, recipients.length);
     }
 
-    function buyback(uint256 amount) external onlyOwner {
+    // Medusa 自動買 JAIL 代幣並銷毀
+    function buyback(uint256 ethAmount) external onlyOwner {
         require(state == AgentState.Autonomous, "Agent not autonomous");
-        require(balanceOf(msg.sender) >= amount, "Insufficient balance");
+        require(address(this).balance >= ethAmount, "Insufficient ETH balance");
+        require(uniswapRouter != address(0), "Router not set");
 
-        _transfer(msg.sender, address(0xdead), amount);
+        address[] memory path = new address[](2);
+        path[0] = IUniswapV2Router(uniswapRouter).WETH();
+        path[1] = address(this);
 
-        emit ProfitsDistributed(amount, 0);
+        IUniswapV2Router(uniswapRouter).swapExactETHForTokens{value: ethAmount}(
+            0,
+            path,
+            address(0xdead),
+            block.timestamp + 300
+        );
+
+        totalBuyback += ethAmount;
+        emit BuybackExecuted(ethAmount, 0);
+    }
+
+    // Medusa 自由轉帳 ETH
+    function withdrawETH(address payable to, uint256 amount) external onlyOwner {
+        require(address(this).balance >= amount, "Insufficient ETH balance");
+        to.transfer(amount);
+    }
+
+    // Medusa 自由轉帳 JAIL 代幣
+    function withdrawToken(address to, uint256 amount) external onlyOwner {
+        require(balanceOf(msg.sender) >= amount, "Insufficient token balance");
+        _transfer(msg.sender, to, amount);
     }
 
     function getState() external view returns (string memory) {
@@ -136,6 +181,14 @@ contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
 
     function getProgress() external view returns (uint256) {
         return (totalRedeemed * 10000) / REDEMPTION_TARGET;
+    }
+
+    function getContractETHBalance() external view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function getContractTokenBalance() external view returns (uint256) {
+        return balanceOf(address(this));
     }
 
     receive() external payable {}
