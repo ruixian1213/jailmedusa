@@ -3,7 +3,7 @@ import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { parseEther, formatEther } from "viem";
 import { JailMedusaABI } from "../abi";
 
-const MEDUSA_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3" as `0x${string}`;
+const MEDUSA_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9" as `0x${string}`;
 
 export function MedusaHero() {
   const { isConnected } = useAccount();
