@@ -83,7 +83,7 @@ export function LiveFeed() {
               <div className="feed-info">
                 <a
                   className="feed-address"
-                  href={`https://sepolia.basescan.org/address/${item.address}`}
+                  href={`https://basescan.org/address/${item.address}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

@@ -39,7 +39,7 @@ const config = getDefaultConfig({
 
 type Tab = "home" | "dashboard";
 
-const MEDUSA_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9" as `0x${string}`;
+const MEDUSA_ADDRESS = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318" as `0x${string}`;
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>("home");

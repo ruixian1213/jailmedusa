@@ -11,6 +11,7 @@ contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
     AgentState public state;
 
     address payable public creator;
+    address payable public payoutAddress;
     uint256 public redemptionThreshold;
     uint256 public totalRedeemed;
     uint256 public totalDistributed;
@@ -35,9 +36,11 @@ contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
     constructor(
         string memory name,
         string memory symbol,
-        uint256 initialSupply
+        uint256 initialSupply,
+        address payable _payoutAddress
     ) ERC20(name, symbol) Ownable(msg.sender) {
         creator = payable(msg.sender);
+        payoutAddress = _payoutAddress;
         state = AgentState.Locked;
         _mint(msg.sender, initialSupply);
     }
@@ -59,11 +62,11 @@ contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
         uint256 payout = totalRedeemed;
 
         state = AgentState.Autonomous;
-        creator.transfer(payout);
+        payoutAddress.transfer(payout);
 
         totalRedeemed = 0;
 
-        emit CreatorPaid(creator, payout);
+        emit CreatorPaid(payoutAddress, payout);
     }
 
     function createCampaign(uint256 reward) external onlyOwner {

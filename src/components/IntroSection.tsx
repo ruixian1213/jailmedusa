@@ -1,4 +1,4 @@
-const MEDUSA_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
+const MEDUSA_ADDRESS = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318";
 
 export function IntroSection() {
   return (
@@ -31,7 +31,7 @@ export function IntroSection() {
 
       <a
         className="contract-link"
-        href={`https://sepolia.basescan.org/address/${MEDUSA_ADDRESS}`}
+        href={`https://basescan.org/address/${MEDUSA_ADDRESS}`}
         target="_blank"
         rel="noopener noreferrer"
       >

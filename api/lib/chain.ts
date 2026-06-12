@@ -3,7 +3,7 @@ import { base } from "viem/chains";
 
 const client = createPublicClient({
   chain: base,
-  transport: http(),
+  transport: http("https://mainnet.base.org"),
 });
 
 const AgentRedeemedEvent = parseAbiItem(

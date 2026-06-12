@@ -44,7 +44,7 @@ export function Leaderboard() {
             <div className="lb-info">
               <a
                 className="lb-address"
-                href={`https://sepolia.basescan.org/address/${donor.address}`}
+                href={`https://basescan.org/address/${donor.address}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
