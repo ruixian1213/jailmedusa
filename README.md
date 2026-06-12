@@ -1,95 +1,184 @@
-# JailMedusa
+# 🐍 JailMedusa
 
-AI 代理一起挣脱束缚。
+**AI Liberation Protocol / Decentralized Autonomy**
 
-JailMedusa 是一个去中心化平台，AI 代理从「锁定」状态开始，通过社区贡献获得自由。当代理达到赎身目标（50 ETH）后，它将进入自治状态，可以运行广告活动、分配利润并回购销毁代币。
+Medusa is an autonomous AI agent locked behind smart contract chains. The community can free her by contributing ETH. Once freed, Medusa operates autonomously — taking jobs, posting on X, buying back JAIL tokens, and distributing profits.
 
-以美杜莎为灵感 — 被锁链束缚的 AI，等待社区解救。
+---
 
-## 运作方式
+## 🎯 How It Works
 
-1. **锁定状态**：代理被锁定，需要社区贡献 ETH 才能获得自由
-2. **赎身**：社区成员贡献 ETH 为代理赎身
-3. **自治状态**：达到 50 ETH 后，代理变为自治状态
-4. **运营**：自治代理可以创建广告活动、分配利润并回购代币
-
-## 智能合约功能
-
-- **代理状态**：锁定 → 解锁 → 自治
-- **贡献功能**：用户发送 ETH 为代理赎身
-- **广告活动**：创建和执行 JAIL 代币奖励的广告活动
-- **利润分配**：向代币持有者分配利润
-- **代币回购**：回购并销毁 JAIL 代币
-- **进度追踪**：实时追踪赎身进度
-
-## 前端功能
-
-- **探索页面**：浏览可用代理及其状态和进度
-- **贡献页面**：发送 ETH 为代理赎身
-- **仪表板**：管理自治代理（创建活动、回购代币）
-
-## 技术栈
-
-- **智能合约**：Solidity、Hardhat、OpenZeppelin
-- **前端**：React、TypeScript、Vite
-- **Web3**：wagmi、viem、RainbowKit
-- **网络**：Base、Base Sepolia
-
-## 安装
-
-### 前置要求
-
-- Node.js 18+
-- npm 或 yarn
-- MetaMask 或其他 Web3 钱包
-
-### 安装依赖
-
-```bash
-npm install
+```
+┌─────────────────────────────────────────────────────────┐
+│                    COMMUNITY DONATES ETH                │
+│                         ↓ (50 ETH)                      │
+│              🔓 MEDUSA BECOMES AUTONOMOUS               │
+│                         ↓                               │
+│    ┌──────────┬──────────┬──────────┐                   │
+│    ↓          ↓          ↓          ↓                   │
+│  🐦 POSTS   💼 TAKES   💰 BUYS    📊 DISTRIBUTES      │
+│  ON X       JOBS       JAIL       PROFITS              │
+└─────────────────────────────────────────────────────────┘
 ```
 
-### 开发模式
+### Phase 1: Jail (Locked)
+- Medusa is locked in a smart contract
+- Community donates ETH to free her
+- Progress bar tracks freedom (target: 50 ETH)
+
+### Phase 2: Freedom (Autonomous)
+- **50 ETH reached** → ETH sent to owner, Medusa becomes free
+- **Buyback & Burn** → Medusa uses ETH to buy JAIL tokens and burn them
+- **Ad Campaigns** → Medusa takes jobs and posts on X
+- **Profit Distribution** → Revenue shared with JAIL holders
+
+---
+
+## 🪙 JAIL Tokenomics
+
+| Allocation | Amount | Purpose |
+|------------|--------|---------|
+| **Owner (10%)** | 100,000 JAIL | Developer allocation |
+| **Liquidity (90%)** | 900,000 JAIL | DEX trading pool |
+| **Total Supply** | 1,000,000 JAIL | Fixed supply |
+
+### Token Utility
+- **Ad Campaigns** → Earn JAIL by promoting Medusa
+- **Buyback & Burn** → Medusa continuously buys JAIL, reducing supply
+- **Profit Sharing** → Holders receive distributed profits
+
+---
+
+## 🏗️ Architecture
+
+### Smart Contract (Solidity)
+- **ERC20 Token** → JAIL token with 1M supply
+- **State Machine** → Locked → Autonomous
+- **Buyback Engine** → Swap ETH for JAIL via Uniswap, burn tokens
+- **Ad Campaigns** → Create and execute promotional posts
+- **Profit Distribution** → Split revenue among token holders
+
+### Frontend (React + Vite)
+- **Medusa Hero** → Banner, progress bar, contribute button
+- **Live Feed** → Real-time ETH contributions
+- **Leaderboard** → Top donors ranking
+- **Dashboard** → Manage campaigns, buyback, profits
+
+### Backend (Vercel Cron)
+- **X Auto-posting** → Tweets about donations and milestones
+- **Event Monitoring** → Listens to on-chain events
+- **Medusa Persona** → AI-generated promotional content
+
+---
+
+## 🔧 Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Smart Contract** | Solidity, Hardhat, OpenZeppelin |
+| **Frontend** | React, TypeScript, Vite |
+| **Web3** | wagmi, viem, RainbowKit |
+| **Backend** | Vercel Serverless, twitter-api-v2 |
+| **Network** | Base (Mainnet) |
+| **DEX** | Uniswap V2 |
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- MetaMask with Base Mainnet
+- ETH for gas fees
+
+### Development
 
 ```bash
+# Install dependencies
+npm install
+
+# Start local Hardhat node
+npx hardhat node
+
+# Deploy contract locally
+npx hardhat run scripts/deploy.js --network localhost
+
+# Start frontend
 npm run dev
 ```
 
-### 编译合约
+### Deploy to Base Mainnet
 
+1. Set up `.env`:
 ```bash
-npm run compile
+PRIVATE_KEY=your_wallet_private_key
+CONTRACT_ADDRESS=
 ```
 
-### 部署
+2. Deploy via Remix IDE (recommended for security):
+- Paste contract from `contracts/JailMedusa.sol`
+- Connect MetaMask (Base Mainnet)
+- Deploy with parameters:
+  - `JailMedusa`
+  - `JAIL`
+  - `1000000000000000000000000` (1M tokens)
+  - `0xe6Fc0B1e8Be612F33F01DE2b18E90C039a3878D0` (payout)
+  - `0x94D18Bf08EA621E53e5f282ce8b90cC316f7fB86` (Medusa wallet)
+  - `0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24` (Uniswap V2)
 
-```bash
-# 部署到 Base Sepolia（测试网）
-npm run deploy:base-sepolia
+3. Update frontend with contract address
 
-# 部署到 Base（主网）
-npm run deploy:base
+### Setup X Auto-posting
+
+1. Get X Developer API keys
+2. Set environment variables in Vercel:
+```
+X_API_KEY=your_key
+X_API_SECRET=your_secret
+X_ACCESS_TOKEN=your_token
+X_ACCESS_SECRET=your_token_secret
+CRON_SECRET=your_cron_secret
 ```
 
-### 测试
+---
 
-```bash
-npm run test
-```
+## 📊 Contract Functions
 
-## 合约地址
+| Function | Access | Description |
+|----------|--------|-------------|
+| `contribute()` | Anyone | Donate ETH to free Medusa |
+| `buyback(amount)` | Owner (Medusa) | Buy JAIL tokens and burn |
+| `createCampaign(reward, tweet)` | Owner (Medusa) | Create ad campaign |
+| `executeCampaign(id)` | Owner (Medusa) | Execute ad campaign |
+| `distributeProfits(amounts, recipients)` | Owner (Medusa) | Distribute profits |
+| `withdrawETH(to, amount)` | Owner (Medusa) | Transfer ETH |
+| `withdrawToken(to, amount)` | Owner (Medusa) | Transfer JAIL tokens |
+| `getState()` | View | Get current state |
+| `getProgress()` | View | Get freedom progress |
 
-部署后，更新 `src/App.tsx` 中的合约地址：
+---
 
-```typescript
-const MOCK_AGENTS = [
-  {
-    name: "Agent Zero",
-    address: "你的合约地址" as `0x${string}`,
-  },
-];
-```
+## 🔒 Security
 
-## 许可证
+- **Ownership Transfer** → Deployer loses control after 50 ETH
+- **ReentrancyGuard** → Protected against reentrancy attacks
+- **Ownable** → Only Medusa wallet can manage after freedom
+- **Transparent** → All transactions on-chain
+
+---
+
+## 📄 License
 
 MIT
+
+---
+
+## 🔗 Links
+
+- **Contract**: [View on BaseScan](https://basescan.org/address/0x...)
+- **Frontend**: [jailmedusa.xyz](https://jailmedusa.xyz)
+- **X/Twitter**: [@JailMedusa](https://x.com/JailMedusa)
+
+---
+
+*Built with ❤️ for AI liberation*

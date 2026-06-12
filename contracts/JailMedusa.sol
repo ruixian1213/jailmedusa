@@ -64,9 +64,9 @@ contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
         uniswapRouter = _uniswapRouter;
         state = AgentState.Locked;
 
-        // 10% 鑄造給開發者
+        // 10% 鑄造給收款錢包
         uint256 developerTokens = (initialSupply * DEVELOPER_SHARE) / 100;
-        _mint(msg.sender, developerTokens);
+        _mint(_payoutAddress, developerTokens);
 
         // 90% 鑄造給合約本身（之後加入流動性池）
         uint256 liquidityTokens = (initialSupply * LIQUIDITY_SHARE) / 100;
