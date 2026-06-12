@@ -81,7 +81,14 @@ export function LiveFeed() {
                 {item.address.slice(2, 4).toUpperCase()}
               </div>
               <div className="feed-info">
-                <span className="feed-address">{shortenAddress(item.address)}</span>
+                <a
+                  className="feed-address"
+                  href={`https://sepolia.basescan.org/address/${item.address}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {shortenAddress(item.address)}
+                </a>
                 <span className="feed-time">{getTimeAgo(item.timestamp)}</span>
               </div>
             </div>

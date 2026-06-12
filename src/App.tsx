@@ -9,6 +9,7 @@ import {
   getDefaultConfig,
 } from "@rainbow-me/rainbowkit";
 import { MedusaHero } from "./components/MedusaHero";
+import { IntroSection } from "./components/IntroSection";
 import { LiveFeed } from "./components/LiveFeed";
 import { Leaderboard } from "./components/Leaderboard";
 import { Dashboard } from "./components/Dashboard";
@@ -78,6 +79,7 @@ function App() {
               {activeTab === "home" && (
                 <>
                   <MedusaHero />
+                  <IntroSection />
                   <div className="content-grid">
                     <LiveFeed />
                     <Leaderboard />

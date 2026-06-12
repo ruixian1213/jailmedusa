@@ -42,7 +42,14 @@ export function Leaderboard() {
               {donor.address.slice(2, 4).toUpperCase()}
             </div>
             <div className="lb-info">
-              <span className="lb-address">{shortenAddress(donor.address)}</span>
+              <a
+                className="lb-address"
+                href={`https://sepolia.basescan.org/address/${donor.address}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {shortenAddress(donor.address)}
+              </a>
               <div className="lb-bar-wrap">
                 <div className="lb-bar" style={{ width: `${donor.percent * 3}%` }} />
               </div>
