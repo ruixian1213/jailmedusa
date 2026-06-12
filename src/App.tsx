@@ -51,7 +51,7 @@ function App() {
             <header className="app-header">
               <div className="header-left">
                 <div className="logo" onClick={() => setActiveTab("home")} style={{ cursor: "pointer" }}>
-                  <img src="/logo.svg" alt="JailMedusa" className="logo-svg" />
+                  <img src="/logo.png" alt="JailMedusa" className="logo-img" />
                   <h1>JailMedusa</h1>
                 </div>
               </div>

@@ -47,9 +47,12 @@ export function MedusaHero() {
   return (
     <div className="medusa-hero">
       <div className="hero-glow" />
-      <div className="hero-content">
+      <div className="hero-banner-img">
+          <img src="/hero-banner.png" alt="Medusa" />
+        </div>
+        <div className="hero-content">
         <div className="hero-logo-wrap">
-          <img src="/logo.svg" alt="Medusa" className="hero-logo" />
+          <img src="/logo.png" alt="Medusa" className="hero-logo" />
           <div className={`hero-status-dot ${displayState === "Autonomous" ? "free" : ""}`} />
         </div>
 
