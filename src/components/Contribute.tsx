@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { parseEther, formatEther } from "viem";
-import { JailAgentABI } from "../abi";
+import { JailMedusaABI } from "../abi";
 
 interface ContributeProps {
   contractAddress: `0x${string}`;
@@ -14,19 +14,19 @@ export function Contribute({ contractAddress }: ContributeProps) {
 
   const { data: state, isError: stateError } = useReadContract({
     address: contractAddress,
-    abi: JailAgentABI,
+    abi: JailMedusaABI,
     functionName: "getState",
   });
 
   const { data: totalRedeemed } = useReadContract({
     address: contractAddress,
-    abi: JailAgentABI,
+    abi: JailMedusaABI,
     functionName: "totalRedeemed",
   });
 
   const { data: progress } = useReadContract({
     address: contractAddress,
-    abi: JailAgentABI,
+    abi: JailMedusaABI,
     functionName: "getProgress",
   });
 
@@ -43,7 +43,7 @@ export function Contribute({ contractAddress }: ContributeProps) {
     if (!amount) return;
     writeContract({
       address: contractAddress,
-      abi: JailAgentABI,
+      abi: JailMedusaABI,
       functionName: "contribute",
       value: parseEther(amount),
     });

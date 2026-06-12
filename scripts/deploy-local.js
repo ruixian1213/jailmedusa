@@ -3,16 +3,16 @@ import hre from "hardhat";
 async function main() {
   const [owner] = await hre.ethers.getSigners();
   
-  const name = "JailAgent";
+  const name = "JailMedusa";
   const symbol = "JAIL";
   const initialSupply = hre.ethers.parseEther("1000000");
 
-  const JailAgent = await hre.ethers.getContractFactory("JailAgent");
+  const JailMedusa = await hre.ethers.getContractFactory("JailMedusa");
   
   // Deploy 3 agents
   const agents = [];
   for (let i = 1; i <= 3; i++) {
-    const agent = await JailAgent.deploy(name, symbol, initialSupply);
+    const agent = await JailMedusa.deploy(name, symbol, initialSupply);
     await agent.waitForDeployment();
     const addr = await agent.getAddress();
     agents.push({ name: `Agent ${i}`, address: addr });

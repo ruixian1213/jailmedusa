@@ -47,6 +47,11 @@ body {
   font-size: 2rem;
 }
 
+.logo-svg {
+  width: 48px;
+  height: 48px;
+}
+
 .logo h1 {
   font-size: 2rem;
   font-weight: 800;

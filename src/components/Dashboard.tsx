@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { formatEther, parseEther } from "viem";
-import { JailAgentABI } from "../abi";
+import { JailMedusaABI } from "../abi";
 
 interface DashboardProps {
   contractAddress: `0x${string}`;
@@ -16,26 +16,26 @@ export function Dashboard({ contractAddress }: DashboardProps) {
 
   const { data: state, isError: stateError } = useReadContract({
     address: contractAddress,
-    abi: JailAgentABI,
+    abi: JailMedusaABI,
     functionName: "getState",
   });
 
   const { data: creator } = useReadContract({
     address: contractAddress,
-    abi: JailAgentABI,
+    abi: JailMedusaABI,
     functionName: "creator",
   });
 
   const { data: balance } = useReadContract({
     address: contractAddress,
-    abi: JailAgentABI,
+    abi: JailMedusaABI,
     functionName: "balanceOf",
     args: address ? [address] : undefined,
   });
 
   const { data: campaignCount } = useReadContract({
     address: contractAddress,
-    abi: JailAgentABI,
+    abi: JailMedusaABI,
     functionName: "campaignCount",
   });
 
@@ -48,7 +48,7 @@ export function Dashboard({ contractAddress }: DashboardProps) {
     if (!reward) return;
     writeContract({
       address: contractAddress,
-      abi: JailAgentABI,
+      abi: JailMedusaABI,
       functionName: "createCampaign",
       args: [parseEther(reward)],
     });
@@ -59,7 +59,7 @@ export function Dashboard({ contractAddress }: DashboardProps) {
     if (!buybackAmount) return;
     writeContract({
       address: contractAddress,
-      abi: JailAgentABI,
+      abi: JailMedusaABI,
       functionName: "buyback",
       args: [parseEther(buybackAmount)],
     });

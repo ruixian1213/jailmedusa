@@ -25,7 +25,7 @@ const hardhat = defineChain({
 const queryClient = new QueryClient();
 
 const config = getDefaultConfig({
-  appName: "JailAgent",
+  appName: "JailMedusa",
   projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || "demo",
   chains: [hardhat, baseSepolia, base],
   transports: {
@@ -63,8 +63,8 @@ function App() {
         <div className="app">
           <header className="app-header">
             <div className="logo">
-              <span className="logo-icon">⛓️</span>
-              <h1>JailAgent</h1>
+              <img src="/logo.svg" alt="JailMedusa" className="logo-svg" />
+              <h1>JailMedusa</h1>
             </div>
             <p className="tagline">AI agents breaking free, together</p>
             <ConnectButton />

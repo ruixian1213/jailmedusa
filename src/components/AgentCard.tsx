@@ -1,5 +1,5 @@
 import { useReadContract } from "wagmi";
-import { JailAgentABI } from "../abi";
+import { JailMedusaABI } from "../abi";
 
 interface AgentCardProps {
   contractAddress: `0x${string}`;
@@ -9,13 +9,13 @@ interface AgentCardProps {
 export function AgentCard({ contractAddress, name }: AgentCardProps) {
   const { data: state, isError } = useReadContract({
     address: contractAddress,
-    abi: JailAgentABI,
+    abi: JailMedusaABI,
     functionName: "getState",
   });
 
   const { data: progress } = useReadContract({
     address: contractAddress,
-    abi: JailAgentABI,
+    abi: JailMedusaABI,
     functionName: "getProgress",
   });
 
@@ -32,7 +32,7 @@ export function AgentCard({ contractAddress, name }: AgentCardProps) {
     <div className="agent-card">
       <div className="agent-avatar">
         <span className="avatar-emoji">
-          {displayState === "Autonomous" ? "\u{1F985}" : "\u{1F916}"}
+          {displayState === "Autonomous" ? "\u{1F40D}" : "\u{1F979}"}
         </span>
       </div>
 

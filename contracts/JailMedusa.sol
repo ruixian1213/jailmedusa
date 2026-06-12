@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract JailAgent is ERC20, Ownable, ReentrancyGuard {
+contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
     enum AgentState { Locked, Unlocked, Autonomous }
 
     AgentState public state;

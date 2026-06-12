@@ -3,15 +3,15 @@ import hre from "hardhat";
 async function main() {
   const [owner, user1, user2] = await hre.ethers.getSigners();
   
-  console.log("=== JailAgent 本地模擬 ===\n");
+  console.log("=== JailMedusa 本地模擬 ===\n");
 
   // 部署合約
-  const name = "JailAgent";
+  const name = "JailMedusa";
   const symbol = "JAIL";
   const initialSupply = hre.ethers.parseEther("1000000");
 
-  const JailAgent = await hre.ethers.getContractFactory("JailAgent");
-  const jailAgent = await JailAgent.deploy(name, symbol, initialSupply);
+  const JailMedusa = await hre.ethers.getContractFactory("JailMedusa");
+  const jailAgent = await JailMedusa.deploy(name, symbol, initialSupply);
   await jailAgent.waitForDeployment();
 
   const address = await jailAgent.getAddress();

@@ -1,4 +1,4 @@
-export const JailAgentABI = [
+export const JailMedusaABI = [
   {
     type: "constructor",
     inputs: [
