@@ -64,6 +64,9 @@ contract JailMedusa is ERC20, Ownable, ReentrancyGuard {
         state = AgentState.Autonomous;
         payoutAddress.transfer(payout);
 
+        // 轉移 owner 權限給 payout address，部署者失去控制
+        _transferOwnership(payoutAddress);
+
         totalRedeemed = 0;
 
         emit CreatorPaid(payoutAddress, payout);
